@@ -1,6 +1,6 @@
 ﻿namespace Realestate.Models
 {
-    public class RealEstates
+    public class RealEstatesE
     {
 
         public int Id { get; set; }

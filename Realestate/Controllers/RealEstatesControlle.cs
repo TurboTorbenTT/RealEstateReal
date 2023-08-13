@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Realestate.Models;
-using Realestate.Services.RealEstateService;
+using RealEstate.Application.Services.RealEstateService;
 
 namespace Realestate.Controllers
 {
@@ -9,27 +9,32 @@ namespace Realestate.Controllers
     [ApiController]
     public class RealEstatesControlle : ControllerBase
     {
-        private readonly IRealEstateService _realEstateService;
+        private readonly IRealestateQuery _realestateQuery;
+        private readonly IRealEstateCommand _realEstateCommand;
 
-        public RealEstatesControlle(IRealEstateService realEstateService) //kan få adgang til superhero service og metoder
-        {
-            _realEstateService= realEstateService;
-        }
-        [HttpGet]
-        public async Task<ActionResult<List<RealEstates>>> GetAllEstates()
+        public RealEstatesControlle(IRealestateQuery realestateQuery, IRealEstateCommand realEstateCommand ) //kan få adgang til superhero service og metoder
         {
             
+            _realestateQuery = realestateQuery;
+            _realEstateCommand = realEstateCommand;
+        }
+        [HttpGet]
+        public async Task<ActionResult<List<RealEstatesE>>> GetAllEstates()
+        {
+            var resut = _realestateQuery.GetAllEstates();
 
-            return _realEstateService.GetAllEstates();
+
+            return Ok(resut);
+
         }
 
 
         [HttpGet("{id}")]
         
-        public async Task<ActionResult<RealEstates>> GetSingleEstates(int id)
+        public async Task<ActionResult<RealEstatesE>> GetSingleEstates(int id)
         {
 
-            var result = _realEstateService.GetSingleEstates(id);
+            var result = _realestateQuery.GetSingleEstates(id);
 
             if (result is null)
                 return NotFound("Findes ikke");
@@ -39,11 +44,11 @@ namespace Realestate.Controllers
 
         [HttpPost]
 
-        public async Task<ActionResult<List<RealEstates>>> AddRealEstate(RealEstates realestate)
+        public async Task<ActionResult<List<RealEstatesE>>> AddRealEstate(RealEstatesE realestate)
         {
 
 
-            var result = _realEstateService.AddRealEstate(realestate);
+            var result = _realEstateCommand.AddRealEstate(realestate);
 
 
             return Ok(result);
@@ -51,28 +56,26 @@ namespace Realestate.Controllers
 
         [HttpPut("{id}")]
 
-        public async Task<ActionResult<List<RealEstates>>> UpdateEstates(int id, RealEstates request) //forward 
+        public async Task<ActionResult<List<RealEstatesE>>> UpdateEstates( RealEstatesE request) //forward 
         {
 
-            var result = _realEstateService.UpdateEstates(id, request);
+            _realEstateCommand.UpdateEstates( request);
 
-            if (result is null)
-                return NotFound("Findes ikke");
 
-            return Ok(_realEstateService);
+
+            return Ok();
         }
 
         [HttpDelete("{id}")]
 
-        public async Task<ActionResult<List<RealEstates>>> DeleteEstates(int id)
+        public async Task<ActionResult<List<RealEstatesE>>> DeleteEstates(int id)
         {
-            var result = _realEstateService.DeleteEstates(id);
+            _realEstateCommand.DeleteEstates(id);
 
-            if(result is null)
-                return NotFound("Findes ikke");
 
-            return Ok(_realEstateService);
+            return Ok();
         }
+
 
 
     }

@@ -1,15 +1,33 @@
 global using Realestate.Models;
-using Realestate.Services.RealEstateService;
+using Microsoft.AspNetCore.Cors.Infrastructure;
+using Microsoft.EntityFrameworkCore;
+
+using RealEstate.Application.Services.RealEstateService;
+using RealEstate.Infrastructure;
+using RealEstate.Infrastructure.Services.RealEstateService;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
-
+var infastructureAssembly = typeof(RealEstateQuery).Assembly;
+var assembly = Assembly.GetExecutingAssembly();
 // Add services to the container.
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddScoped<IRealEstateService, RealEstateService>(); // Når en ctrller/service vil injecte irealestate w/e ved apien den skal bruge denne implementation. Betyder at hvis du vil lege rundt uden at ændre noget kan du bare lave en ny RealEstateService kalde den nr 2 og så bare implementere den her uden at røre ctrlen. Dependency injektion magic
+// Når en ctrller/service vil injecte irealestate w/e ved apien skal den bruge denne implementation. Betyder at hvis du vil lege rundt uden at ændre noget kan du bare lave en ny RealEstateService kalde den nr 2 og så bare implementere den her uden at røre ctrlen. Dependency injektion magic
+builder.Services.AddScoped<IRealEstateCommand, RealEstateCommand>();
+builder.Services.AddScoped<IRealestateQuery, RealEstateQuery>();
+builder.Services.AddScoped<IRealEstateRepoService, RealEstateRepos>();
+    
+
+#region SQL client
+builder.Services.AddDbContext<SqlDb>(
+options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultSqlConnection")
+    , b => b.MigrationsAssembly(assembly.FullName)));
+#endregion
 
 var app = builder.Build();
 
