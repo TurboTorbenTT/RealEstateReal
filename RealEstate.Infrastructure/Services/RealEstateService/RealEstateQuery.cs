@@ -1,10 +1,5 @@
-﻿using Realestate.Models;
-using RealEstate.Application.Services.RealEstateService;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using RealEstate.Application.Services.RealEstateService;
+using Realestate.Models;
 
 namespace RealEstate.Infrastructure.Services.RealEstateService
 {
@@ -18,8 +13,7 @@ namespace RealEstate.Infrastructure.Services.RealEstateService
         }
         public List<RealEstatesE> GetAllEstates()
         {
-            List<RealEstatesE> realestateresult = _sqlDb.realEstates.ToList();
-
+            var realestateresult = _sqlDb.realEstates.ToList();
             return realestateresult;
 
             
@@ -27,7 +21,10 @@ namespace RealEstate.Infrastructure.Services.RealEstateService
 
         public RealEstatesE? GetSingleEstates(int id)
         {
-            RealEstatesE singleestate = _sqlDb.realEstates.Find(id);
+            // Possibly null
+            // Use var style instead of concrete types
+            
+            var singleestate = _sqlDb.realEstates.Find(id);
 
             return singleestate;
 

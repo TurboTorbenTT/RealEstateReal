@@ -1,9 +1,4 @@
 ﻿using Realestate.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RealEstate.Application.Services.RealEstateService
 {
@@ -21,8 +16,7 @@ namespace RealEstate.Application.Services.RealEstateService
             var id =_realEstateRepoService.AddRealEstate(realestate);
 
             return id;
-
-
+            
         }
 
         public void DeleteEstates(int id)

@@ -1,10 +1,5 @@
-﻿using Realestate.Models;
-using RealEstate.Application.Services.RealEstateService;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using RealEstate.Application.Services.RealEstateService;
+using Realestate.Models;
 
 namespace RealEstate.Infrastructure.Services.RealEstateService
 {
@@ -17,6 +12,8 @@ namespace RealEstate.Infrastructure.Services.RealEstateService
             _sqlDb = sqlDb;
         }
 
+        // TODO
+        // RealEstate is implied from repo name and does not need to exist in function naming.
         public int AddRealEstate(RealEstatesE realestate)
         {
             _sqlDb.realEstates.Add(realestate);
@@ -29,6 +26,8 @@ namespace RealEstate.Infrastructure.Services.RealEstateService
             
         }
 
+        // TODO
+        // Name implies plural yet function affects singular
         public void DeleteEstates(int id)
         {
             var realestate = _sqlDb.realEstates.Find(id) ?? throw new ArgumentException("Real estate not found");
@@ -37,14 +36,16 @@ namespace RealEstate.Infrastructure.Services.RealEstateService
 
             _sqlDb.SaveChanges();
         }
-
+        
+        // TODO
+        // Name could be better defining, maybe mirror inner Find() method?
         public RealEstatesE LoadRealestates(int id)
         {
             var realestate = _sqlDb.realEstates.Find(id) ?? throw new ArgumentException("Real estate not found");
 
             return realestate;
         }
-
+        
         public void UpdateEstates(RealEstatesE request)
         {
             _sqlDb.realEstates.Update(request);

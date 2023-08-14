@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Realestate.Models;
+﻿using Microsoft.AspNetCore.Mvc;
 using RealEstate.Application.Services.RealEstateService;
 
+// Namespace does not match location
 namespace Realestate.Controllers
 {
+    // TODO 
+    // Should use DTO instead of domain entities
+    
     [Route("api/[controller]")]
     [ApiController]
     public class RealEstatesControlle : ControllerBase
@@ -61,18 +63,19 @@ namespace Realestate.Controllers
 
             _realEstateCommand.UpdateEstates( request);
 
-
-
+            
             return Ok();
         }
 
         [HttpDelete("{id}")]
 
+        // TODO
+        // Returns List even though it is a delete operation? Probably typo
         public async Task<ActionResult<List<RealEstatesE>>> DeleteEstates(int id)
         {
             _realEstateCommand.DeleteEstates(id);
-
-
+            
+            
             return Ok();
         }
 
